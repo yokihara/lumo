@@ -6,7 +6,9 @@
 ![Platform: macOS arm64](https://img.shields.io/badge/platform-macOS%2013%2B%20·%20arm64-blue.svg)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/YOUR_HANDLE)
 
-An ultra-light menu bar app to control displays on Apple Silicon Macs.
+Lumo is a tiny, free, open-source menu bar app for controlling **external monitor brightness on Apple Silicon Macs** (M1, M2, M3, M4) over DDC/CI. Think of it as a lightweight **alternative to MonitorControl, Lunar, and BetterDisplay** — it adds **input-source switching** and a **per-display night / darkroom dimmer**, all in a sub-1 MB app with no settings window.
+
+Common use cases: adjusting a second monitor's brightness from the keyboard's reach, dimming a USB-C or HDMI display below its hardware minimum at night, and switching a shared monitor's input like a software KVM.
 
 - **Brightness** (DDC/CI): control the hardware backlight of external monitors
 - **Input source switching** (DDC/CI): change a monitor's input from the menu bar, like a KVM
