@@ -133,7 +133,7 @@ Bug reports, feature ideas, and PRs are all welcome. See [CONTRIBUTING.md](CONTR
 
 If Lumo is useful to you, you can buy me a coffee ☕
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/YOUR_HANDLE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/yokihara93q)
 
 > Replace `YOUR_HANDLE` with your actual Buy Me a Coffee username (or swap in GitHub Sponsors).
 
