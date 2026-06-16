@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumo — External monitor brightness, input & darkroom for Apple Silicon Macs</title>
+<meta name="description" content="Lumo is a tiny, free, open-source macOS menu bar app to control external monitor brightness, switch input sources, and dim/warm any display — a lightweight MonitorControl alternative for Apple Silicon (M1/M2/M3/M4) over DDC/CI.">
+<meta name="keywords" content="macOS, external monitor brightness, MonitorControl alternative, DDC/CI, Apple Silicon, menu bar app, input source switching, night mode, display dimmer, M1 M2 M3 M4">
+<link rel="canonical" href="https://yokihara.github.io/lumo/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lumo — display control for Apple Silicon Macs">
+<meta property="og:description" content="Control external monitor brightness, input source, and a per-display night dimmer from one menu bar icon. Free, open-source, under 1 MB.">
+<meta property="og:url" content="https://yokihara.github.io/lumo/">
+<style>
+  :root {
+    --bg: #0a0b14;
+    --panel: #14162a;
+    --ink: #e8e9f3;
+    --muted: #9aa0c0;
+    --gold: #ffcb47;
+    --indigo: #6b6fd8;
+    --line: #232645;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    color: var(--ink);
+    background: radial-gradient(1200px 600px at 50% -10%, #1b1e3a 0%, var(--bg) 60%);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--gold); text-decoration: none; }
+
+  header { text-align: center; padding: 96px 0 56px; }
+  .logo { width: 96px; height: 96px; margin: 0 auto 28px; display: block; filter: drop-shadow(0 8px 30px rgba(107,111,216,.4)); }
+  h1 { font-size: 56px; letter-spacing: -1.5px; font-weight: 700; }
+  .tag { font-size: 20px; color: var(--muted); margin-top: 14px; }
+  .pills { margin-top: 14px; font-size: 13px; color: var(--muted); }
+  .pills span { display: inline-block; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; margin: 4px; }
+
+  .cta { margin-top: 36px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    padding: 12px 22px; border-radius: 12px; font-weight: 600; font-size: 15px;
+    border: 1px solid var(--line); color: var(--ink); transition: transform .12s ease, border-color .12s ease;
+  }
+  .btn:hover { transform: translateY(-2px); border-color: var(--indigo); }
+  .btn.primary { background: linear-gradient(180deg, #ffd969, var(--gold)); color: #1a1500; border: none; }
+
+  /* stylized menu preview (not a photo) */
+  .preview { max-width: 320px; margin: 64px auto 0; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 16px; padding: 16px; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+  .row { margin: 10px 4px; }
+  .row .name { font-size: 13px; font-weight: 600; }
+  .row .bar { height: 6px; border-radius: 3px; background: #2a2e52; margin-top: 8px; position: relative; }
+  .row .bar::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px;
+    background: linear-gradient(90deg, var(--indigo), var(--gold)); }
+  .row.b1 .bar::after { width: 72%; }
+  .row.b2 .bar::after { width: 45%; }
+  .row .cap { font-size: 11px; color: var(--muted); }
+  .preview .divider { height: 1px; background: var(--line); margin: 12px 0; }
+
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 28px; letter-spacing: -.5px; margin-bottom: 24px; }
+  .feats { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .card h3 { font-size: 17px; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 14px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; }
+  td.yes { color: var(--gold); }
+
+  pre { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px;
+    overflow-x: auto; font: 13px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink); }
+  .muted { color: var(--muted); font-size: 13px; margin-top: 10px; }
+
+  footer { padding: 48px 0 80px; text-align: center; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Lumo icon">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#292e61"/><stop offset="1" stop-color="#141733"/>
+        </linearGradient>
+        <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffeb8c"/><stop offset="1" stop-color="#ffb733"/>
+        </linearGradient>
+      </defs>
+      <rect x="10" y="10" width="80" height="80" rx="20" fill="url(#bg)"/>
+      <g fill="#ffcb47">
+        <!-- 8 rays -->
+        <g>
+          <rect x="47" y="14" width="6" height="12" rx="3"/>
+          <rect x="47" y="74" width="6" height="12" rx="3"/>
+          <rect x="14" y="47" width="12" height="6" rx="3"/>
+          <rect x="74" y="47" width="12" height="6" rx="3"/>
+        </g>
+        <g transform="rotate(45 50 50)">
+          <rect x="47" y="14" width="6" height="12" rx="3"/>
+          <rect x="47" y="74" width="6" height="12" rx="3"/>
+          <rect x="14" y="47" width="12" height="6" rx="3"/>
+          <rect x="74" y="47" width="12" height="6" rx="3"/>
+        </g>
+      </g>
+      <circle cx="50" cy="50" r="15" fill="url(#sun)"/>
+    </svg>
+    <h1>Lumo</h1>
+    <p class="tag">External monitor brightness, input &amp; darkroom — from one menu bar icon.</p>
+    <p class="pills"><span>Free &amp; open-source (MIT)</span><span>Apple Silicon · macOS 13+</span><span>under 1 MB</span></p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/yokihara/lumo/releases">Download</a>
+      <a class="btn" href="https://github.com/yokihara/lumo">View on GitHub</a>
+    </div>
+
+    <div class="preview" aria-hidden="true">
+      <div class="row b1"><div class="name">LG HDR 4K</div><div class="bar"></div></div>
+      <div class="divider"></div>
+      <div class="row b2"><div class="cap">🌙 Darkroom — Warmth</div><div class="bar"></div></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>What it does</h2>
+    <div class="feats">
+      <div class="card"><h3>Brightness</h3><p>Control the hardware backlight of external monitors over DDC/CI — including USB-C and HDMI displays.</p></div>
+      <div class="card"><h3>Input switching</h3><p>Change a monitor's input source from the menu bar, like a software KVM for a shared display.</p></div>
+      <div class="card"><h3>Darkroom</h3><p>Dim and warm any screen — including the built-in display — for a per-display night mode. Works even without DDC.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why Lumo?</h2>
+    <table>
+      <tr><th></th><th>Lumo</th><th>MonitorControl</th><th>Lunar / BetterDisplay</th></tr>
+      <tr><td>Price</td><td class="yes">Free (MIT)</td><td>Free</td><td>Freemium / paid</td></tr>
+      <tr><td>Footprint</td><td class="yes">&lt; 1 MB</td><td>~25 MB</td><td>30 MB+</td></tr>
+      <tr><td>Input switching</td><td class="yes">Yes</td><td>No</td><td>Pro</td></tr>
+      <tr><td>Per-display darkroom</td><td class="yes">Yes</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Settings window</td><td class="yes">None</td><td>Yes</td><td>Extensive</td></tr>
+    </table>
+    <p class="muted">Sizes approximate. Want a deep, configurable tool? Use Lunar or BetterDisplay. Want brightness + input + a night dimmer in a sub-1 MB app with zero config? That's Lumo.</p>
+  </section>
+
+  <section>
+    <h2>Install</h2>
+    <p class="muted">Requires an Apple Silicon Mac on macOS 13 (Ventura) or later.</p>
+    <pre># Homebrew
+brew install --cask yokihara/tap/lumo
+
+# or grab the DMG from Releases and drag Lumo.app into Applications</pre>
+  </section>
+
+  <footer>
+    <a href="https://github.com/yokihara/lumo">GitHub</a> · <a href="https://github.com/yokihara/lumo/blob/main/LICENSE">MIT License</a> · © 2026 brpark
+  </footer>
+
+</div>
+</body>
+</html>
