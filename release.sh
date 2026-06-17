@@ -1,10 +1,10 @@
 #!/bin/sh
-# DMG 배포판 생성. Developer ID 서명 + 공증까지 하려면:
-#   1) 최초 1회: xcrun notarytool store-credentials lumo-notary \
-#        --apple-id <애플ID이메일> --team-id <팀ID> --password <앱암호>
-#      (앱 암호는 appleid.apple.com → 로그인 및 보안 → 앱 암호에서 생성)
-#   2) DEV_ID_APP="Developer ID Application: 이름 (팀ID)" ./release.sh
-# DEV_ID_APP 없이 실행하면 ad-hoc 서명 DMG가 나온다 (지인 배포용).
+# Build a distributable DMG. For Developer ID signing + notarization:
+#   1) one time: xcrun notarytool store-credentials lumo-notary \
+#        --apple-id <apple-id-email> --team-id <team-id> --password <app-password>
+#      (create an app password at appleid.apple.com -> Sign-In and Security -> App-Specific Passwords)
+#   2) DEV_ID_APP="Developer ID Application: NAME (TEAMID)" ./release.sh
+# Without DEV_ID_APP it produces an ad-hoc signed DMG (for personal sharing).
 set -e
 cd "$(dirname "$0")"
 
@@ -23,10 +23,10 @@ echo "created $DMG"
 
 if [ -n "${DEV_ID_APP:-}" ]; then
     codesign --force --timestamp --sign "$DEV_ID_APP" "$DMG"
-    echo "notarizing (수 분 소요)..."
+    echo "notarizing (takes a few minutes)..."
     xcrun notarytool submit "$DMG" --keychain-profile lumo-notary --wait
     xcrun stapler staple "$DMG"
-    echo "notarized: $DMG — 이제 어디서든 경고 없이 설치 가능"
+    echo "notarized: $DMG — installs anywhere without a warning now"
 else
-    echo "ad-hoc 빌드: 받는 사람은 첫 실행 시 우클릭 → 열기 필요"
+    echo "ad-hoc build: recipient must right-click -> Open on first launch"
 fi

@@ -11,8 +11,8 @@ cp .build/release/Lumo "$APP/Contents/MacOS/Lumo"
 cp Info.plist "$APP/Contents/Info.plist"
 cp AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 
-# Developer ID 서명: DEV_ID_APP 환경변수가 있으면 hardened runtime으로 정식 서명,
-# 없으면 ad-hoc 서명 (로컬/지인 배포용 — 첫 실행 시 우클릭→열기 필요)
+# Developer ID signing: if DEV_ID_APP is set, sign properly with the hardened runtime;
+# otherwise ad-hoc sign (local/personal sharing — requires right-click → Open on first launch).
 if [ -n "${DEV_ID_APP:-}" ]; then
     codesign --force --options runtime --timestamp --sign "$DEV_ID_APP" "$APP"
 else
