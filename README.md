@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Platform: macOS arm64](https://img.shields.io/badge/platform-macOS%2013%2B%20·%20arm64-blue.svg)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/YOUR_HANDLE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/yokihara93q)
 
 Lumo is a tiny, free, open-source menu bar app for controlling **external monitor brightness on Apple Silicon Macs** (M1, M2, M3, M4) over DDC/CI. Think of it as a lightweight **alternative to MonitorControl, Lunar, and BetterDisplay** — it adds **input-source switching** and a **per-display night / darkroom dimmer**, all in a sub-1 MB app with no settings window.
 
@@ -134,8 +134,6 @@ Bug reports, feature ideas, and PRs are all welcome. See [CONTRIBUTING.md](CONTR
 If Lumo is useful to you, you can buy me a coffee ☕
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/yokihara93q)
-
-> Replace `YOUR_HANDLE` with your actual Buy Me a Coffee username (or swap in GitHub Sponsors).
 
 ## License
 
